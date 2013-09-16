@@ -42,6 +42,7 @@ class StartupScriptMixin(object):
         from mr.awsome import template  # avoid circular import
 
         config = self.get_config(overrides)
+        config['id'] = self.id
         startup_script_path = config.get('startup_script', None)
         if startup_script_path is None:
             return ''
