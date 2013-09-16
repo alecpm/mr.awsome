@@ -423,6 +423,9 @@ class VolumesMassager(BaseMassager):
 class SnapshotsMassager(BaseMassager):
     def __call__(self, main_config, sectionname):
         value = main_config[self.sectiongroupname][sectionname][self.key]
+        if isinstance(value, tuple):
+            # Already massaged via macro inclusion
+            return value
         snapshots = []
         for line in value.split('\n'):
             snapshot = line.split()
@@ -435,6 +438,9 @@ class SnapshotsMassager(BaseMassager):
 class ConnectionsMassager(BaseMassager):
     def __call__(self, main_config, sectionname):
         value = main_config[self.sectiongroupname][sectionname][self.key]
+        if isinstance(value, tuple):
+            # Already massaged via macro inclusion
+            return value
         connections = []
         for line in value.split('\n'):
             connection = line.split()

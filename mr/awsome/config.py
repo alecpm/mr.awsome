@@ -55,6 +55,9 @@ class HooksMassager(BaseMassager):
 class StartupScriptMassager(BaseMassager):
     def __call__(self, main_config, sectionname):
         value = main_config[self.sectiongroupname][sectionname][self.key]
+        if isinstance(value, dict):
+            # We have already processed this entry via a macro include
+            return value
         result = dict()
         if value.startswith('gzip:'):
             value = value[5:]
