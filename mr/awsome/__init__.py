@@ -87,9 +87,12 @@ class AWS(object):
                             metavar="instance",
                             help="Name of the instance from the config.",
                             choices=list(instances))
+        parser.add_argument("-v", "--verbose", action="store_true",
+                            help="Show full console output")
         args = parser.parse_args(argv)
         server = instances[args.server[0]]
-        server.status()
+        verbosity = args.verbose
+        server.status(verbosity)
 
     def cmd_stop(self, argv, help):
         """Stops the instance"""

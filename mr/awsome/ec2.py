@@ -128,7 +128,7 @@ class Instance(StartupScriptMixin, InitSSHKeyMixin, ConnMixin):
     def get_host(self):
         return self.instance.public_dns_name
 
-    def status(self):
+    def status(self, verbose=False):
         instance = self.instance
         if instance is None:
             return
@@ -140,8 +140,10 @@ class Instance(StartupScriptMixin, InitSSHKeyMixin, ConnMixin):
         log.info("Instances private DNS name %s", instance.private_dns_name)
         log.info("Instances public DNS name %s", instance.public_dns_name)
         output = instance.get_console_output().output
-        if output.strip():
+        if output and output.strip():
             log.info("Console output available. SSH fingerprint verification possible.")
+            if verbose:
+                log.info("\nConsole Output:\n%s"%output)
         else:
             log.warn("Console output not (yet) available. SSH fingerprint verification not possible.")
 
