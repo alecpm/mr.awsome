@@ -378,7 +378,7 @@ class AWS(object):
     def cmd_snapshot(self, argv, help):
         """Creates a snapshot of the volumes specified in the configuration"""
         parser = argparse.ArgumentParser(
-            prog="aws status",
+            prog="aws snapshot",
             description=help,
         )
         instances = self.get_instances(command='snapshot')

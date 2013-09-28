@@ -264,19 +264,16 @@ class Instance(StartupScriptMixin, InitSSHKeyMixin, ConnMixin):
 
         return instance
 
-    def snapshot(self, devs=None):
-        if devs is None:
-            devs = set()
-        else:
-            devs = set(devs)
-        volume_ids = [x[0] for x in self.config.get('volumes', []) if x[1] in devs]
+    def snapshot(self):
+        volume_ids = [x[0] for x in self.config.get('volumes', []) if x[1]]
         volumes = dict((x.id, x) for x in self.conn.get_all_volumes())
         for volume_id in volume_ids:
             volume = volumes[volume_id]
             date = datetime.datetime.now().strftime("%Y%m%d%H%M")
             description = "%s-%s" % (date, volume_id)
             log.info("Creating snapshot for volume %s on %s (%s)" % (volume_id, self.id, description))
-            volume.create_snapshot(description=description)
+            snapshot = volume.create_snapshot(description=description)
+            log.info("Snapshot created: %s"%(snapshot.id))
 
 
 class Connection(InitSSHKeyMixin, ConnMixin):
