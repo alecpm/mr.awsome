@@ -209,12 +209,14 @@ class Instance(StartupScriptMixin, InitSSHKeyMixin, ConnMixin):
             log.info("Instance already started, waiting until it's available")
         else:
             log.info("Creating instance '%s'" % self.id)
-            reservation = self.image().run(
+            reservation = self.conn.run_instances(self.config['image'],
                 1, 1, config['keypair'],
                 instance_type=config.get('instance_type', 'm1.small'),
                 security_groups=self.securitygroups(),
                 user_data=self.startup_script(overrides=overrides),
-                placement=config['placement']
+                placement=config['placement'],
+                monitoring_enabled=config.get('cloudwatch', False),
+                ebs_optimized=config.get('ebs_optimized', False)
             )
             instance = reservation.instances[0]
             log.info("Instance created, waiting until it's available")
